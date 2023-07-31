@@ -1,49 +1,47 @@
-let map;
-let userMarker;
+function initMap() {
+  // Crea un nuevo mapa en el elemento con el id "map"
+  const map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 0, lng: 0 }, // Centrar el mapa en coordenadas iniciales
+      zoom: 15 // Zoom del mapa
+  });
 
-// Crea el evento para que cuando se cargue la página le pida acceso a la ubicación
-window.addEventListener("load", () => {
+  // Verifica si el navegador soporta geolocalización
   if (navigator.geolocation) {
-    // El navegador admite geolocalización
-    navigator.geolocation.watchPosition(
-      (position) => {
-        const userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
+      // Obtiene la ubicación actual del dispositivo
+      navigator.geolocation.getCurrentPosition(
+          (position) => {
+              const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+              };
 
-        // Si el marcador ya existe, simplemente actualiza su posición
-        if (userMarker) {
-          userMarker.setPosition(userLocation);
-        } else {
-          // Si el marcador no existe, crea uno nuevo y llama a la función initMap
-          initMap(userLocation.lat, userLocation.lng);
-        }
-      },
-      (error) => {
-        console.error("Error al obtener la ubicación del usuario:", error);
-      }
-    );
+              // Centra el mapa en la ubicación actual
+              map.setCenter(pos);
+
+              // Crea un marcador en la ubicación actual
+              const marker = new google.maps.Marker({
+                  position: pos,
+                  map: map,
+                  title: "Ubicación actual"
+              });
+
+              // Actualiza la ubicación del marcador si el dispositivo se mueve
+              navigator.geolocation.watchPosition((newPosition) => {
+                  const newPos = {
+                      lat: newPosition.coords.latitude,
+                      lng: newPosition.coords.longitude
+                  };
+                  marker.setPosition(newPos);
+                  map.setCenter(newPos);
+              });
+          },
+          (error) => {
+              console.error("Error al obtener la ubicación: ", error);
+          }
+      );
   } else {
-    console.error("El navegador no admite geolocalización.");
+      console.error("Geolocalización no está soportada por el navegador.");
   }
-});
-
-// Función para inicializar el mapa
-function initMap(latitude, longitude) {
-  // Configura el centro del mapa en la ubicación proporcionada (latitude, longitude)
-  const initialLocation = { lat: latitude, lng: longitude };
-
-  // Crea el objeto del mapa
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: initialLocation,
-    zoom: 16, // Ajusta el nivel de zoom según tus necesidades
-  });
-
-  // Crea un marcador en la ubicación del usuario
-  userMarker = new google.maps.Marker({
-    position: initialLocation,
-    map: map,
-    title: "Tu ubicación",
-  });
 }
+
+initMap();
