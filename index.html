@@ -1,15 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Transporte Público - Monitoreo</title>
-  <!-- Reemplaza "YOUR_API_KEY" con tu clave de API de Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&libraries=initMap" async defer></script>
-</head>
-<body>
-  <h1>Monitoreo de Transporte Público</h1>
-  <!-- Añade un botón o cualquier otro elemento que permita al usuario iniciar el proceso de obtener la ubicación -->
-  <div id="map" style="height: 90vh; width: 100vw;"></div>
 
-  <script src="JS/code.js"></script>
-</body>
+  <!-- Reemplaza "YOUR_API_KEY" con tu clave de API de Google Maps 
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&callback=initMap"></script> -->
+
+<html>
+  <head>
+    <title>Geolocation</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="CSS/main.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&callback=initMap"
+      defer
+    ></script>
+    <script type="module" src="JS/code.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!--  
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises.
+      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+      for more information.
+      -->
+  </body>
 </html>

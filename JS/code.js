@@ -1,47 +1,52 @@
-function initMap() {
-  // Crea un nuevo mapa en el elemento con el id "map"
-  const map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 0, lng: 0 }, // Centrar el mapa en coordenadas iniciales
-      zoom: 15 // Zoom del mapa
-  });
+var map, marker;
 
-  // Verifica si el navegador soporta geolocalización
-  if (navigator.geolocation) {
-      // Obtiene la ubicación actual del dispositivo
-      navigator.geolocation.getCurrentPosition(
-          (position) => {
-              const pos = {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude
-              };
+var watchId, geoLoc;
 
-              // Centra el mapa en la ubicación actual
-              map.setCenter(pos);
+function initMap(){
+    const position = {lat: 40.730610, lng: -73.935242};
+    
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: position,
+        zoom: 10
+    });
 
-              // Crea un marcador en la ubicación actual
-              const marker = new google.maps.Marker({
-                  position: pos,
-                  map: map,
-                  title: "Ubicación actual"
-              });
+    marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: 'Mi ubicacion'
+    });
 
-              // Actualiza la ubicación del marcador si el dispositivo se mueve
-              navigator.geolocation.watchPosition((newPosition) => {
-                  const newPos = {
-                      lat: newPosition.coords.latitude,
-                      lng: newPosition.coords.longitude
-                  };
-                  marker.setPosition(newPos);
-                  map.setCenter(newPos);
-              });
-          },
-          (error) => {
-              console.error("Error al obtener la ubicación: ", error);
-          }
-      );
-  } else {
-      console.error("Geolocalización no está soportada por el navegador.");
-  }
+    getPosition();
+
+}
+
+function getPosition(){
+
+    if(navigator.geolocation){
+        var options = {timeout: 60000}
+        geoLoc = navigator.geolocation;
+        watchId = geoLoc.watchPosition(showLocationOnMap, errorHandler, options);
+    }else {
+        alert('El novegador no soporta la geolocalizacion');
+    }
+}
+
+function showLocationOnMap(position){
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    console.log(`Latitude: ${latitude}  Longitude: ${longitude}`);
+    let pos = {lat: latitude, lng: longitude};
+
+    map.setCenter(pos);
+    marker.setPosition(pos);
+}
+
+function errorHandler(err){
+    if(err.code == 1){
+        alert('Error: Acceso denegado!');
+    }else if(err.code == 2){
+        alert('Error: Posicion no disponible!');
+    }
 }
 
 initMap();
