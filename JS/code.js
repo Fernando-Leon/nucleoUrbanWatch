@@ -1,52 +1,50 @@
-var map, marker;
+let map, infoWindow;
 
-var watchId, geoLoc;
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 20.05430, lng: -99.34229 },
+    zoom: 16,
+  });
+  infoWindow = new google.maps.InfoWindow();
 
-function initMap(){
-    const position = {lat: 40.730610, lng: -73.935242};
-    
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: position,
-        zoom: 10
-    });
+  const locationButton = document.createElement("button");
 
-    marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        title: 'Mi ubicacion'
-    });
+  locationButton.textContent = "Mi ubicacion";
+  locationButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  locationButton.addEventListener("click", () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
 
-    getPosition();
-
-}
-
-function getPosition(){
-
-    if(navigator.geolocation){
-        var options = {timeout: 60000}
-        geoLoc = navigator.geolocation;
-        watchId = geoLoc.watchPosition(showLocationOnMap, errorHandler, options);
-    }else {
-        alert('El novegador no soporta la geolocalizacion');
+          infoWindow.setPosition(pos);
+          infoWindow.setContent("Location found.");
+          infoWindow.open(map);
+          map.setCenter(pos);
+          map.setZoom(18);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        },
+      );
+    } else {
+      handleLocationError(false, infoWindow, map.getCenter());
     }
+  });
 }
 
-function showLocationOnMap(position){
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    console.log(`Latitude: ${latitude}  Longitude: ${longitude}`);
-    let pos = {lat: latitude, lng: longitude};
-
-    map.setCenter(pos);
-    marker.setPosition(pos);
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed."
+      : "Error: Your browser doesn't support geolocation.",
+  );
+  infoWindow.open(map);
 }
 
-function errorHandler(err){
-    if(err.code == 1){
-        alert('Error: Acceso denegado!');
-    }else if(err.code == 2){
-        alert('Error: Posicion no disponible!');
-    }
-}
-
-initMap();
+window.initMap = initMap;
