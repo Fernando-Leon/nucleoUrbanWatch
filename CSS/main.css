@@ -2,8 +2,160 @@
  * Always set the map height explicitly to define the size of the div element
  * that contains the map. 
  */
- #map {
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif, Helvetica, Arial;
+}
+
+:root {
+  --mainColor: #2C525B;
+  --light: #F2F2F2;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+header {
+  display: flex;
+  padding: 0px;
+  align-items: center;
+  height: 6%;
+  justify-content: space-between;
+  background-color: var(--mainColor);
+}
+
+header button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%; 
+  width: auto;
+  padding: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+header button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+header button span {
+  color: #F2F2F2;
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+header button img {
+  max-height: 100%;
+  margin: auto;
+}
+
+header button h2 {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+#list-routes {
+  position: absolute;
+  display: none;
+  z-index: 1;
+  list-style: none;
+  top: 6%;
+  right: 0;
+  flex-direction: column;
+  gap: 1px;
+  width: 40%;
+  max-width: 50%;
+  background-color: var(--light);
+  transition: all 0.3s ease;
+}
+
+.show {
+  display: flex; 
+}
+
+#list-routes li {
+  width: 100%;
+  color: var(--light);
+  padding: 10px;
+  background-color: var(--mainColor);
+  cursor: pointer;
+}
+
+
+
+#list-routes li:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+#map {
+  height: 86%; 
+}
+
+#controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1px;
+  height: 8%;
+  max-height: 8%;
+  overflow: hidden;
+  background-color: var(--light);
+}
+
+
+#controls div {
+  /* Tu estilo actual */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+  padding: auto;
+  cursor: pointer;
+  background-color: var(--mainColor);
+
+  /* Estilos adicionales para el efecto ripple */
+  overflow: hidden;
+  position: relative;
+}
+
+#controls .ripple {
+  /* Estilos del círculo ripple */
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleEffect 0.4s linear;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+#controls div span {
+  color: #F2F2F2;
+  height: 20%;
+  font-size: .9rem;
+}
+
+
+#controls div img {
+  height: 45%;
 }
 
 /* 
@@ -28,6 +180,8 @@ body {
   height: 40px;
   cursor: pointer;
 }
+
+
 .custom-map-control-button:hover {
   background: rgb(235, 235, 235);
 }

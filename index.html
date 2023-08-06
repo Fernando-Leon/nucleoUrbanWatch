@@ -8,21 +8,50 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
     <link rel="stylesheet" type="text/css" href="CSS/main.css" />
+    <script  src="JS/routes.js"></script>
     <script type="module" src="JS/code.js"></script>
   </head>
   <body>
-    <div id="map"></div>
+    <main>
+      
+      <header>
+        <button><img src="src/svg/menu.svg" alt="Logo"/> </button>   
+        <button id="router"><span>Rutas</span> <img src="src/svg/expand.svg" alt=""></button>
+        <ul id="list-routes">
+            <li id="show-all-routes">Todas</li>
+            <li class="json-points" data-value="{&quot;lat1&quot;: 20.008185, &quot;lng1&quot;: -99.343076, &quot;lat2&quot;: 19.990102, &quot;lng2&quot;: -99.325838}">UTTT - Cruz Azul</li>
+            <li class="json-points" data-value="{&quot;lat1&quot;: 19.987747, &quot;lng1&quot;: -99.198645, &quot;lat2&quot;: 20.057612, &quot;lng2&quot;: -99.343669}">Tula - Vito</li>
+            <li class="json-points" data-value="{&quot;lat1&quot;: 20.057612, &quot;lng1&quot;: -99.343669, &quot;lat2&quot;: 19.904286, &quot;lng2&quot;: -99.337432}">Tula - Tepeji</li>
+        </ul> 
+      </header>
+      <div id="map"></div>
+      
+      <section id="controls">
+        
+        <div>
+          <img src="src/svg/directions.svg" alt="">
+          <span>Direcciones</span></div>
+        <div>
+          <img src="src/svg/home.svg" alt="">
+          <span>Inicio</span></div>
+        <div>
+          <img src="src/svg/ubications.svg" alt="">
+          <span>Paradas</span></div>
+          
+        </section>
+      </main>
 
-    <!-- 
-      The `defer` attribute causes the callback to execute after the full HTML
-      document has been parsed. For non-blocking uses, avoiding race conditions,
-      and consistent behavior across browsers, consider loading using Promises.
-      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
-      for more information.
+      <!-- 
+        The `defer` attribute causes the callback to execute after the full HTML
+        document has been parsed. For non-blocking uses, avoiding race conditions,
+        and consistent behavior across browsers, consider loading using Promises.
+        See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+        for more information.
       -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&callback=initMap&v=weekly"
+      <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&callback=initMap&v=weekly&libraries=places"
       defer
-    ></script>
+      ></script>
+      <script src="JS/menus.js"></script>
   </body>
 </html>

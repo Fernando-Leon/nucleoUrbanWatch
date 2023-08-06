@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mostrar múltiples rutas en Google Maps</title>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeSRDdw6qMnUFONR7OV10JlSse2nvJ1H0&callback=initMap&v=weekly&libraries=places"
+    defer
+    ></script>
+</head>
+<body>
+    <div id="map" style="height: 400px; width: 100%;"></div>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: {lat: LATITUD_CENTRO, lng: LONGITUD_CENTRO} // Coordenadas del centro del mapa
+            });
+
+            // Lista de rutas con origen y destino
+            var routes = [
+                { origin: 'Origen 1', destination: 'Destino 1' },
+                { origin: 'Origen 2', destination: 'Destino 2' },
+                { origin: 'Origen 3', destination: 'Destino 3' },
+                // Agrega más rutas según tus necesidades
+            ];
+
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer();
+
+            // Función para mostrar una ruta
+            function showRoute(route) {
+                var request = {
+                    origin: route.origin,
+                    destination: route.destination,
+                    travelMode: 'DRIVING'
+                };
+
+                directionsService.route(request, function(result, status) {
+                    if (status == 'OK') {
+                        directionsRenderer.setDirections(result);
+                        directionsRenderer.setMap(map);
+                    }
+                });
+            }
+
+            // Mostrar todas las rutas en el mapa
+            for (var i = 0; i < routes.length; i++) {
+                showRoute(routes[i]);
+            }
+        }
+    </script>
+</body>
+</html>
