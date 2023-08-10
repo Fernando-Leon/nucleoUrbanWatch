@@ -4,6 +4,7 @@ var markers = []; // Lista de marcadores de ubicación
 var directionsRenderer = []; // Indica las direcciones de la ruta
 var infoWindow;
 var movingMarker;
+var data = {};
 
 
 function initMap() {
@@ -86,8 +87,13 @@ function createRoute(startPoint, endPoint) {
     travelMode: google.maps.TravelMode.DRIVING, // Modo de transporte (DRIVING, WALKING, BICYCLING, TRANSIT)
   };
 
+  
+
   directionsService.route(request, (result, status) => {
     if (status === google.maps.DirectionsStatus.OK) {
+      const distancia = result.routes[0].legs[0].distance.text;
+      const duracion = result.routes[0].legs[0].duration.text;
+      data = {time: duracion, distance: distancia}
       clearRoutes(); 
       directionsRenderer.setDirections(result);
       addMarker(startPoint, "Punto de Inicio");
@@ -107,14 +113,15 @@ liElements.forEach((li) => {
     const { lat1, lng1, lat2, lng2 } = JSON.parse(jsonValue);
     const obj1 = { lat: lat1, lng: lng1 };
     const obj2 = { lat: lat2, lng: lng2 };
-    createRoute(obj1, obj2);
-    moveMarkerAlongRouteWithSpeed(obj1, obj2); // Iniciar el movimiento del marcador
+    createRoute(obj1, obj2);// Iniciar el movimiento del marcador
+    moveMarkerAlongRoute(obj1, obj2) // Corregir aquí
   });
 });
 
 
 
-function moveMarkerAlongRouteWithSpeed(startPoint, endPoint, speedKph = 20) {
+// Función para mover el marcador a lo largo de la ruta
+function moveMarkerAlongRoute(startPoint, endPoint) {
   if (movingMarker) {
     movingMarker.setMap(null); // Eliminar el marcador existente si hay uno
   }
@@ -126,47 +133,27 @@ function moveMarkerAlongRouteWithSpeed(startPoint, endPoint, speedKph = 20) {
     icon: "../src/svg/icon.png", // Personaliza el icono del marcador móvil
   });
 
-  const directionsService = new google.maps.DirectionsService();
-  const request = {
-    origin: startPoint,
-    destination: endPoint,
-    travelMode: google.maps.TravelMode.DRIVING, // Modo de transporte (DRIVING, WALKING, BICYCLING, TRANSIT)
-  };
-  
-  directionsService.route(request, (result, status) => {
-    if (status === google.maps.DirectionsStatus.OK) {
-      const route = result.routes[0];
-      const steps = route.legs[0].steps;
-  
-      const totalDistanceMeters = route.legs[0].distance.value; // En metros
-      const totalDistanceKilometers = totalDistanceMeters / 10000; // En kilómetros
-      const numSteps = Math.ceil(totalDistanceKilometers * 1000); // Multiplica por 10
-  
-      let stepIndex = 0; // Declarar stepIndex aquí
-  
-      function animateMarkerAlongRoute() {
-        if (stepIndex >= numSteps) {
-          movingMarker.setMap(null); // Eliminar el marcador al finalizar la ruta
-          return;
-        }
-  
-        const step = steps[Math.floor(stepIndex)];
-        const latLng = step.start_location;
-  
-        movingMarker.setPosition(latLng);
-  
-        stepIndex++;
-        setTimeout(animateMarkerAlongRoute, 1000); // Actualizar posición cada 10 segundos para una animación suave
-      }
-  
-      animateMarkerAlongRoute();
-    } else {
-      console.error("Error al obtener la ruta:", status);
+  const numSteps = 100; // Número de pasos para la transición
+  let step = 0;
+
+  function animateMarker() {
+    if (step >= numSteps) {
+      movingMarker.setMap(null); // Eliminar el marcador al finalizar la ruta
+      return;
     }
-  });
+
+    const fraction = step / numSteps;
+    const lat = (endPoint.lat - startPoint.lat) * fraction + startPoint.lat;
+    const lng = (endPoint.lng - startPoint.lng) * fraction + startPoint.lng;
+
+    const newPosition = new google.maps.LatLng(lat, lng);
+    movingMarker.setPosition(newPosition);
+
+    step++;
+    setTimeout(animateMarker, 50); // Actualizar posición cada 50 ms para una animación suave
+  }
+
+  animateMarker();
 }
 
-
-
- 
 window.initMap = initMap;  
