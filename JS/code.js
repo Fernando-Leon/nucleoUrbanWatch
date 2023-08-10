@@ -120,7 +120,6 @@ liElements.forEach((li) => {
 
 
 
-// Función para mover el marcador a lo largo de la ruta
 function moveMarkerAlongRoute(startPoint, endPoint) {
   if (movingMarker) {
     movingMarker.setMap(null); // Eliminar el marcador existente si hay uno
@@ -133,27 +132,40 @@ function moveMarkerAlongRoute(startPoint, endPoint) {
     icon: "../src/svg/icon.png", // Personaliza el icono del marcador móvil
   });
 
-  const numSteps = 100; // Número de pasos para la transición
-  let step = 0;
+  const directionsService = new google.maps.DirectionsService();
+  const request = {
+    origin: startPoint,
+    destination: endPoint,
+    travelMode: google.maps.TravelMode.DRIVING, // Modo de transporte (DRIVING, WALKING, BICYCLING, TRANSIT)
+  };
 
-  function animateMarker() {
-    if (step >= numSteps) {
-      movingMarker.setMap(null); // Eliminar el marcador al finalizar la ruta
-      return;
+  directionsService.route(request, (result, status) => {
+    if (status === google.maps.DirectionsStatus.OK) {
+      const route = result.routes[0];
+      const steps = route.legs[0].steps;
+
+      let stepIndex = 0;
+
+      function animateMarkerAlongRoute() {
+        if (stepIndex >= steps.length) {
+          movingMarker.setMap(null); // Eliminar el marcador al finalizar la ruta
+          return;
+        }
+
+        const step = steps[stepIndex];
+        const latLng = step.start_location;
+        
+        movingMarker.setPosition(latLng);
+
+        stepIndex++;
+        setTimeout(animateMarkerAlongRoute, 100); // Actualizar posición cada 100 ms para una animación suave
+      }
+
+      animateMarkerAlongRoute();
+    } else {
+      console.error("Error al obtener la ruta:", status);
     }
-
-    const fraction = step / numSteps;
-    const lat = (endPoint.lat - startPoint.lat) * fraction + startPoint.lat;
-    const lng = (endPoint.lng - startPoint.lng) * fraction + startPoint.lng;
-
-    const newPosition = new google.maps.LatLng(lat, lng);
-    movingMarker.setPosition(newPosition);
-
-    step++;
-    setTimeout(animateMarker, 50); // Actualizar posición cada 50 ms para una animación suave
-  }
-
-  animateMarker();
+  });
 }
 
 window.initMap = initMap;  
