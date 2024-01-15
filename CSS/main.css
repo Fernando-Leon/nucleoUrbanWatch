@@ -1,18 +1,21 @@
-/* 
- * Always set the map height explicitly to define the size of the div element
- * that contains the map. 
- */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif, Helvetica, Arial;
+  font-family: 'Roboto', sans-serif;
 }
 
 :root {
-  --mainColor: #2C525B;
-  --light: #F2F2F2;
+  --mainColor:#414b5d; /* Cambiado a un tono más oscuro */
+  --accentColor: #3498db; /* Acento de color azul */
+  --light: #ecf0f1; /* Fondo claro */
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--light);
 }
 
 main {
@@ -24,45 +27,78 @@ main {
 
 header {
   display: flex;
-  padding: 0px;
   align-items: center;
-  height: 6%;
+  height: 10%;
   justify-content: space-between;
   background-color: var(--mainColor);
+  color: #fff;
+  box-shadow: 0 10px 5px rgba(0, 0, 0, 0.2);
+  /*border-top: #37A19B solid 3px;*/
+}
+header h1 {
+  font-size: 1.8rem; /* Tamaño de la fuente */
+  font-weight: 700; /* Grosor de la fuente */
+  color: #fff; /* Color del texto */
+  text-align: center; /* Alineación del texto */
+  text-transform: uppercase; /* Convertir texto a mayúsculas */
+  letter-spacing: 2px; /* Espaciado entre letras */
+  margin: 0; /* Eliminar el margen predeterminado */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra suave */
+  transition: transform 0.3s ease; /* Agregada la animación de transformación */
+  border-bottom: #5c8fa6 solid 3px;
+}
+
+header h1:hover {
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño al pasar el cursor */
+}
+
+header i.rotating {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px); /* Ajusta la posición a tu gusto */
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: #db3434; /* Ajusta el color a tu gusto */
+  animation: rotateWorld 4s linear infinite; /* Ajusta la velocidad y estilo de la animación */
+}
+
+@keyframes rotateWorld {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 header button {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 100%; 
-  width: auto;
+  height: 100%;
   padding: 10px;
   background-color: transparent;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* Animación de cambio de color */
 }
-
 
 header button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
 header button span {
-  color: #F2F2F2;
-  font-size: .9rem;
+  color: #fff;
+  font-size: 0.9rem;
   font-weight: 500;
 }
+
+
 
 header button img {
   max-height: 100%;
   margin: auto;
 }
-
-header button h2 {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
 
 #list-routes {
   position: absolute;
@@ -75,31 +111,32 @@ header button h2 {
   gap: 1px;
   width: 40%;
   max-width: 50%;
-  background-color: var(--light);
+  background-color: #414b5d;
   transition: all 0.3s ease;
+  border-radius: 10px; /* Bordeado de 10 px */
+  margin-bottom: 5px; /* Espaciado entre elementos */
 }
 
 .show {
-  display: flex; 
+  display: flex;
 }
 
 #list-routes li {
   width: 100%;
   color: var(--light);
   padding: 10px;
-  background-color: var(--mainColor);
+  background-color: #414b5d;
   cursor: pointer;
+  border-bottom: #5c8fa6 solid 1px;
+  border-top: #5c8fa6 solid 1px;
 }
-
-
 
 #list-routes li:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-
 #map {
-  height: 86%; 
+  height: 86%;
 }
 
 #controls {
@@ -113,9 +150,7 @@ header button h2 {
   background-color: var(--light);
 }
 
-
 #controls div {
-  /* Tu estilo actual */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -124,15 +159,13 @@ header button h2 {
   height: 100%;
   padding: auto;
   cursor: pointer;
-  background-color: var(--mainColor);
-
-  /* Estilos adicionales para el efecto ripple */
+  background-color:#413934;
   overflow: hidden;
   position: relative;
+  transition: background-color 0.3s ease; /* Animación de cambio de color */
 }
 
 #controls .ripple {
-  /* Estilos del círculo ripple */
   position: absolute;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
@@ -146,26 +179,24 @@ header button h2 {
     opacity: 0;
   }
 }
-
 #controls div span {
-  color: #F2F2F2;
+  color: #fff;
   height: 20%;
-  font-size: .9rem;
+  font-size: 1rem; /* Aumenté el tamaño de la fuente */
+  font-weight: 600; /* Hice más audaz el texto */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Agregué una sombra suave */
+}
+
+header button span {
+  color: #fff;
+  font-size: 1rem; /* Aumenté el tamaño de la fuente */
+  font-weight: 600; /* Hice más audaz el texto */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Agregué una sombra suave */
 }
 
 
 #controls div img {
   height: 45%;
-}
-
-/* 
- * Optional: Makes the sample page fill the window. 
- */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 .custom-map-control-button {
@@ -175,13 +206,14 @@ body {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
   margin: 10px;
   padding: 0 0.5em;
-  font: 400 18px Roboto, Arial, sans-serif;
+  font: 400 18px 'Roboto', Arial, sans-serif;
   overflow: hidden;
   height: 40px;
   cursor: pointer;
+  transition: background 0.3s ease; /* Animación de cambio de color */
 }
-
 
 .custom-map-control-button:hover {
   background: rgb(235, 235, 235);
+  color: var(--mainColor); /* Cambia el color de texto al hacer hover */
 }
